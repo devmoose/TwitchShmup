@@ -42,7 +42,6 @@ player.onCollision = function(other){
          console.log("GAME OVER!!!");
          Resources.Explosion.play();
          game.kill(player);
-         game.isDead = true;
          game.canvas.style.opacity = .5;
          game.end();
       }
