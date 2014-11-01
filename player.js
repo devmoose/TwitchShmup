@@ -1,6 +1,13 @@
 var player = new Actor(100, 100, 50, 50);
 player.health = 100;
 
+player.reset = function() {
+   player.health = 100;
+   player.x = 100;
+   player.y = 100;
+   player.isDead = false;
+};
+
 var healthbar = new Actor(20, 600 - 40, Config.HealthBarWidth, 20);
 healthbar.color = 'lime';
 
@@ -31,12 +38,14 @@ player.onKey(40, function(){
 player.onCollision = function(other){
    if(other.type === 'enemy'){
       player.health -= Config.EnemyDamage;
-      console.log("health", player.health, other);
       if(player.health <= 0){
          console.log("GAME OVER!!!");
          Resources.Explosion.play();
          game.kill(player);
-      }      
+         game.isDead = true;
+         game.canvas.style.opacity = .5;
+         game.end();
+      }
       
       game.kill(other);
 

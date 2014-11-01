@@ -1,7 +1,6 @@
 
 var EnemyDispatcher = function(engine){
    var me = this;
-   me.enemies = [];
    me.engine = engine;
 
    var buildBullet = function(x, y){
@@ -39,15 +38,27 @@ var EnemyDispatcher = function(engine){
 
          enemy.onCollision = function(other){
             if(other.type === 'bullet'){
-               clearTimeout(enemy.intervalHandle);
                Resources.Explosion.play();
+               clearTimeout(enemy.intervalHandle);
                me.engine.kill(enemy);
                me.engine.kill(other);
+               me.engine.score += Config.Enemy.basic.Points;
+               game.enemies--;
+            }
+            if (other.type === 'player') {
+               Resources.Explosion.play();
+               clearTimeout(enemy.intervalHandle);
+               me.engine.kill(enemy);
+               me.engine.score += Config.Enemy.basic.Points;
                game.enemies--;
             }
          };
 
          enemy.fireBullet = function() {
+            if (enemy.isDead) {
+               clearTimeout(enemy.intervalHandle);
+               return;
+            }
             var center = enemy.getCenter();
             var bullet = buildBullet(center.x, center.y);
             me.engine.actors.push(bullet);
@@ -67,11 +78,17 @@ var EnemyDispatcher = function(engine){
    };
 
    me.spawn = function(numberOfUnits, type){
+      if (game.isDead) {
+         clearInterval(me.beginSpawn);
+         return;
+      }
       for(var i = 0; i < numberOfUnits && i+game.enemies <= Config.MaxEnemy; i++){
          game.actors.push(buildEnemey(type));
          game.enemies++;
       }
    };
+
+   me.beginSpawn = setInterval(function() {me.spawn(1,'basic');},1500);
 
    return me;
 };

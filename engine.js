@@ -5,9 +5,10 @@ window.requestAnimationFrame = window.requestAnimationFrame ||
                                window.msRequestAnimationFrame;
 
 
-var Game = function(canvasId){
+var Game = function(canvasId, gameoverId){
    var me = this;
 
+   var gameover = document.getElementById(gameoverId);
    var canvas = document.getElementById(canvasId);
    var ctx = canvas.getContext('2d');
 
@@ -16,7 +17,7 @@ var Game = function(canvasId){
    me.background = 'black';
 
    me.running = false;
-   me.isDebug = true;
+   me.isDebug = false;
 
    me.actors = [];
    me.enemies = 0;
@@ -24,6 +25,11 @@ var Game = function(canvasId){
    me._killed = [];
 
    me.keys = [];
+
+   me.score = 0;
+
+   me.lastFpsUpdate = Date.now();
+   me.fps = 60;
 
    window.addEventListener('keydown', function(evt){
       if(me.keys.indexOf(evt.keyCode) === -1){
@@ -72,7 +78,7 @@ var Game = function(canvasId){
       });
 
       var currentX = 200;
-      var widthKey = 60;
+      var widthKey = 40;
       ctx.fillStyle = 'lime';
       ctx.font = '20pt Consolas';
       me.keys.forEach(function(key){
@@ -82,17 +88,48 @@ var Game = function(canvasId){
    };
 
    me.drawFps = function(delta){
-      var seconds = delta/1000;
-      var fps = 1/seconds;
+      var current = Date.now();
+      if (current - me.lastFpsUpdate > 500) {
+         var seconds = delta/1000;
+         me.fps = 1/seconds;
 
+         ctx.fillStyle = 'lime';
+         ctx.font = '20pt Consolas';
+
+         me.lastFpsUpdate = current;
+      }
+      ctx.fillText(me.fps.toFixed(1), 20, 20);
+   };
+
+   me.end = function() {
+      me.actors.forEach(function(a) {
+         if (a.type === 'enemy') {
+            me.kill(a);
+         }
+      });
+      gameover.style.visibility = "visible";
+   };
+
+   me.init = function() {
+      gameover.style.visibility = "hidden";
+      var stars = new StarField(200);
+      player.reset();
+      healthbar.width = Math.max(Config.HealthBarWidth * (player.health/100), 0);
+      me.actors.push(player);
+      me.actors.push(healthbar);
+      me.actors.push(stars);
+      var dispatcher = new EnemyDispatcher(game);
+   };
+
+   me.drawScore = function(delta) {
       ctx.fillStyle = 'lime';
       ctx.font = '20pt Consolas';
-      ctx.fillText(fps.toFixed(1), 20, 20);
+      ctx.fillText("Score: " + me.score, 20, 540);
    };
 
    me.start = function(){
+      me.canvas.style.opacity = 1;
       me.running = true;
-
 
       var lastTime = Date.now();
       (function mainloop(){
@@ -110,9 +147,10 @@ var Game = function(canvasId){
 
          me.update(elapsed);
          me.draw(elapsed);
-         me.debugDraw(elapsed);
+         me.drawScore(elapsed);
 
          if(me.isDebug){
+            me.debugDraw(elapsed);
             me.drawFps(elapsed);
          }
 

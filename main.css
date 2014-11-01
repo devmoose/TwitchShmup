@@ -5,3 +5,24 @@
    display: block;
    margin: auto;
 }
+
+#gameover {
+   overflow: hidden;
+   width: 800px;
+   margin: auto;
+   visibility: hidden;
+   z-index: 10;
+   position: relative;
+   top: -450px;
+   text-align: center;
+}
+
+#gameover p {
+   font-size: 2em;
+   font-weight: bold;
+}
+
+#gameover a {
+   font-size: 1.2em;
+   color: #FFFFFF;
+}

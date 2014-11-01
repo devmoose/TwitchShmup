@@ -6,6 +6,10 @@
 </head>
 <body>
    <canvas id="game" width="800" height="600"></canvas>
+   <div id="gameover">
+      <p>Game Over!</p>
+      <a href="#" onclick="game = new Game('game','gameover');game.init();game.start();">Try Again</a>
+   </div>
 
    <script type="text/javascript" src="config.js"></script>
    <script type="text/javascript" src="sound.js"></script>

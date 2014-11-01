@@ -21,6 +21,7 @@ var Config = {
          Speed : -100,
          Health : 10,
          Damage : 20,
+         Points : 100,
          FireMinInterval : 1000,
          FireMaxInterval : 2000
       },
@@ -28,22 +29,23 @@ var Config = {
          Speed: -75,
          Health : 50,
          Damage : 40,
+         Points : 250,
          FireMinInterval : 1500,
          FireMaxInterval : 2500
       }
    },
 
-   Levels : {
-      1 : {
-         enemies : {
-            basic : {count : 40, delay : 1500}
+   Levels : [
+      {
+         enemies: {
+            basic: {count: 40}
          }
       },
-      2 : {
+      {
          enemies : {
-            basic : {count : 40, delay : 1500},
-            advanced : {count : 4, delay: 8}
+            basic : {count : 40},
+            advanced : {count : 4}
          }
       }
-   }
+   ]
 };
