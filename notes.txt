@@ -1,0 +1,16 @@
+
+Shoot-em Up Game "Spooky Space Time"
+==================
+
+
+Ideas:
+- Side Scrolling
+- Space Themed?
+- Pixel (lo-fi) Art
+
+
+Technical Requirements:
+- Image/Sprite loading
+- Sound loading
+- Collision Detection
+
