@@ -4,13 +4,28 @@ player.health = 100;
 var healthbar = new Actor(20, 600 - 40, Config.HealthBarWidth, 20);
 healthbar.color = 'lime';
 
+player.onKey(37, function() {
+   if (player.x > 0) {
+      player.x += -Config.PlayerSpeed;
+   }
+});
+
+player.onKey(39, function() {
+   if (player.x + player.width < game.canvas.width) {
+      player.x += Config.PlayerSpeed;
+   }
+});
 
 player.onKey(38, function(){
-   player.y += -Config.PlayerSpeed;
+   if (player.y > 0) {
+      player.y += -Config.PlayerSpeed;
+   }
 });
 
 player.onKey(40, function(){
-   player.y += Config.PlayerSpeed;
+   if (player.y + player.height < game.canvas.height) {
+      player.y += Config.PlayerSpeed;
+   }
 });
 
 player.onCollision = function(other){
@@ -28,7 +43,7 @@ player.onCollision = function(other){
       healthbar.width = Math.max(Config.HealthBarWidth * (player.health/100), 0);
 
    }
-}
+};
 
 player.image = Resources.Ship;
 
@@ -45,9 +60,9 @@ player.onKey(32, function(){
       bullet.dx = Config.BulletSpeed;
       bullet.onExitScreen = function(){
          game.kill(bullet);
-      }
+      };
 
-      Resources.Laser.play()
+      Resources.Laser.play();
       game.actors.push(bullet);
       player.lastFire = currentTime;
    }

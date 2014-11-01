@@ -18,7 +18,8 @@ var Game = function(canvasId){
    me.running = false;
    me.isDebug = true;
 
-   me.actors = [];   
+   me.actors = [];
+   me.enemies = 0;
 
    me._killed = [];
 
@@ -40,12 +41,12 @@ var Game = function(canvasId){
    me.kill = function(actor){
       actor.isDead = true;
       me._killed.push(actor);
-   }
+   };
 
    me.clear = function(){
       ctx.fillStyle = me.background;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-   }
+   };
 
    me.update = function(delta){
       me.actors.forEach(function(a){
@@ -53,7 +54,7 @@ var Game = function(canvasId){
             a.update(me, delta);
          }
       });
-   }
+   };
 
    me.draw = function(delta){
       me.actors.forEach(function(a){
@@ -61,7 +62,7 @@ var Game = function(canvasId){
             a.draw(ctx,delta);
          }
       });
-   }
+   };
 
    me.debugDraw = function(delta){
       me.actors.forEach(function(a){
@@ -78,7 +79,7 @@ var Game = function(canvasId){
          ctx.fillText(key, currentX, 20);
          currentX+=widthKey;
       });
-   }
+   };
 
    me.drawFps = function(delta){
       var seconds = delta/1000;
@@ -87,7 +88,7 @@ var Game = function(canvasId){
       ctx.fillStyle = 'lime';
       ctx.font = '20pt Consolas';
       ctx.fillText(fps.toFixed(1), 20, 20);
-   }
+   };
 
    me.start = function(){
       me.running = true;
@@ -124,7 +125,7 @@ var Game = function(canvasId){
 
          lastTime = current;
       })();
-   }
+   };
 
    return me;
-}
+};
